@@ -37,7 +37,31 @@ public class BST <Key extends Comparable, Value>  implements SymbolTable <Key, V
      */
     @Override
     public void put(Key key, Value val) {
+        root = put(root, key, val);
+    }
 
+//    create a helper method
+    private Node put( Node current, Key key, Value val)
+    {
+        if(current == null ) // base case
+        {
+            Node theNewOne = new Node ( key, val);
+            theNewOne.nodesInSubtree = 1;
+            return theNewOne;
+        }
+        int compare = key.compareTo(current.key);
+
+        if(compare < 0 )
+        {
+            current.left = put(current.left, key, val);
+        } else if (compare > 0 ) {
+            current.right = put (current.right, key,val );
+        }
+        else {
+            current.value = val;
+        }
+        current.nodesInSubtree = size(current.left ) + size(current.right) + 1 ;
+        return current;
     }
 
     /**
@@ -97,7 +121,14 @@ public class BST <Key extends Comparable, Value>  implements SymbolTable <Key, V
     }
 
     private int size(Node current){
-        return size(current.left) + size(current.right) + 1;
+//        return size(current.left) + size(current.right) + 1;
+        if(current == null )
+        {
+            return 0;
+        }
+        else {
+            return current.nodesInSubtree;
+        }
     }
     /**
      * Returns an iterator that refers to all the keys
